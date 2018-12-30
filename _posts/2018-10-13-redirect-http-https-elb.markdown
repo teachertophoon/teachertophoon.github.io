@@ -5,19 +5,19 @@ date: 2018-10-13 23:59:59 +0900
 tags: [AWS, ELB, SSL, HTTPS]
 comments: true
 ---
-# AWS와 HTTPS 프로토콜 사용
+## AWS와 HTTPS 프로토콜 사용
 요즘 IT회사들 특히, 스타트업(Startup)에서는 AWS(Amazon Web Service)와 같은 IaaS(Infrastructure as a Service)를 많이 활용하고 있다.
 
 거기에다가 요즘은 HTTP가 아닌 HTTPS 프로토콜(Protocol)을 이용하여 접속하는 사이트들을 많이 접할 수 있다.
 
 HTTPS 프로토콜을 사용하는 이유는 [이 사이트](https://developers.google.com/web/fundamentals/security/encrypt-in-transit/why-https?hl=ko)에서 자세히 설명하고 있다.
 
-# 이 블로그 글은 왜 필요한가?
+## 이 블로그 글은 왜 필요한가?
 보통 우리가 사용하는 웹브라우저(인터넷 익스플로러, 크롬 등)에서 주소창에 주소를 입력하면 HTTP 프로토콜을 사용하게 된다.
 
-예를 들어, 주소창에 ‘google.com’을 입력하면 웹브라우저는 ‘http&#58;//google.com’ 주소로 이동하게 된다.
+예를 들어, 주소창에 ‘google.com’을 입력하면 웹브라우저는 ‘http&#58;//google\.com’ 주소로 이동하게 된다.
 
-### 아니, 근데 왜 거짓말을 하시죠? ‘https&#58;//www.google.com’으로 접속되는데요!
+### 아니, 근데 왜 거짓말을 하시죠? ‘https&#58;//www.google\.com’으로 접속되는데요!
 라고 말하시는 분이 계실 것이다. 이렇게 대답하셨던 분은 이 블로그 글을 꼭 읽어보시길 바란다.
 우리가 최종적으로 해야 할 목표이기도 하다.
 
@@ -43,20 +43,20 @@ AWS에서는 두 가지 형태의 로드밸런서를 제공하고 있다.
 
 왜냐하면 Application Load Balancer는 간단하게 AWS 대시보드에서 리디렉션 작업이 가능하기 때문이다. [[링크]](https://docs.aws.amazon.com/ko_kr/elasticloadbalancing/latest/application/load-balancer-listeners.html#redirect-actions)
 
-Application Load Balancer 서비스가 공개된 2016년 8월 12일 이전(링크)에 AWS ELB를 사용했다면 100% Classic Load Balancer 사용자이다.
+Application Load Balancer 서비스가 공개된 2016년 8월 12일 이전([[링크]](https://aws.amazon.com/ko/blogs/korea/new-aws-application-load-balancer/))에 AWS ELB를 사용했다면 100% Classic Load Balancer 사용자이다.
 
 우리 회사도 예외가 아니었다. 당첨!
 
 번거롭지만, 앞으로 설명드릴 내용들을 여러분들의 톰켓(Tomcat) 서버에 설정해야 한다.
 
-# 3일간의 노력한 결과를 여러분들께 공개합니다!
+## 3일간의 노력한 결과를 여러분들께 공개합니다!
 제발 이 글을 읽으신 분들은 시간낭비 하지 마시길 바라는 마음뿐입니다. ㅠㅠ
 
-최종적인 목표는 웹브라우저 주소창에 ‘wdgbook.com’, ‘www.wdgbook.com’을 입력하면
+최종적인 목표는 웹브라우저 주소창에 ‘wdgbook\.com’, ‘www\.wdgbook\.com’을 입력하면
 
-자동으로 ‘https&#58;//www.wdgbook.com’으로 리디렉션되게 하는 것이다.
+자동으로 ‘https&#58;//www\.wdgbook\.com’으로 리디렉션되게 하는 것이다.
 
-# 1. 처리한 내용
+## 1. 처리한 내용
 (1) 작업할 인스턴스의 콘솔(Console)에 접속하기 (PuTTY 등을 활용)
 
 (2) AWS 대시보드 접속하여 로드밸런서에 붙어있는 인스턴스 하나 제거 (설마 인스턴스 하나만 있는 건 아니겠죠?)
@@ -92,7 +92,7 @@ RewriteRule .* https://www.wdgbook.com%{REQUEST_URI} [L,R=301]
 
 (11) 로드밸런서에 1-(2)번에서 제거했던 인스턴스 연결하기
 
-# 2. 위와 같이 처리한 이유
+## 2. 위와 같이 처리한 이유
 (1) AWS ELB를 통해서 들어온 요청(Request)의 경우, Tomcat의 RewriteCond에서 %{HTTPS} 값을 알 수가 없다.
 
 (2) (1)의 문제를 해결하기 위해서는 HTTP 요청의 X-Forwarded-Proto 헤더를 사용해야 한다고 AWS 가이드에 설명되어 있다. [[링크]](https://aws.amazon.com/ko/premiumsupport/knowledge-center/redirect-http-https-elb/)
@@ -107,8 +107,8 @@ internalProxies 항목은 직접 로드밸런서의 IP주소를 작성하거나 
 
 프로토콜이 http이고
 
-요청한 호스트의 주소가 www.wdgbook.com 이거나 wdgbook.com 이면
+요청한 호스트의 주소가 www\.wdgbook\.com 이거나 wdgbook\.com 이면
 
-https&#58;//www.wdgbook.com 으로 Redirect 되도록 응답을 301(Permanent Redirect)을 주도록 설정했다.
+https&#58;//www\.wdgbook\.com 으로 Redirect 되도록 응답을 301(Permanent Redirect)을 주도록 설정했다.
 
 301로 응답하는 이유는 검색엔진에게 말 그대로 ‘영구적’으로 옮겼다는 뜻으로 해석하게 만들어 검색엔진이 우리 사이트에 대한 정보를 최적화 SEO(Search Engine Optimization, CEO 아님 ^^) 하도록 도와줄 수 있다.
