@@ -24,7 +24,8 @@ url: "http://blog.tophoon.com" # the base hostname & protocol for your site, e.g
 github_username: teachertophoon
 google_analytics: UA-131518672-1
 google_adsense: ca-pub-6825502907404214
-disqus_shortname: blog-tophoon-com
+disqus:
+    shortname: blog-tophoon-com
 
 # Build settings
 markdown: kramdown
