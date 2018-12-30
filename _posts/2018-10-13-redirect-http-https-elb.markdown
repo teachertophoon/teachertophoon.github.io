@@ -20,7 +20,9 @@ HTTPS 프로토콜을 사용하는 이유는 [이 사이트](https://developers.
 
 오늘 설명할 내용은 AWS의 ELB(Elastic Load Balancer)과 연결되어 있는 인스턴스(Instance)에 HTTPS로 HTTP 트래픽 리디렉션(Redirection)하는 방법을 설명하겠다.
 아마 HTTPS를 사용하는 사이트에 필수적으로 적용하는 것이라 매우 유용한 글이 될꺼라 생각한다.
+
 (AWS의 ELB를 사용하고 ELB에 SSL 인증서를 적용한 이후의 상황이라고 가정하고 설명하겠다.)
+
 ![ELB](/files/elb_instances_1.png)
 
 보통 회사에서의 서버 구성을 간단하게 나타내면 위와 같은 그림일 것이다.
