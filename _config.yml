@@ -14,11 +14,14 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: 탑훈의 프로그래밍 교실
+author: 탑훈(TopHoon)
 email: teachertophoon@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  TopHoon (Backend Engineering) / 
+  오피스 앱 개발하다가 사업하고 싶어서 회사를 나왔다가
+  좋은 개발자를 양성하고 싶어 강사도 해봤다가
+  지금은 이전 회사 동기의 추천으로 훌륭한 동료들이 모여있는
+  H모 스타트업에서 서버개발자로 일하고 있습니다.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://blog.tophoon.com" # the base hostname & protocol for your site, e.g. http://example.com
 github_username: teachertophoon
