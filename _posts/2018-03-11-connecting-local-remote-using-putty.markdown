@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "PuTTY를 이용하여 내 컴퓨터에서 가상 머신(서버)로 원격 접속하기"
+title: "[애플리케이션 배포] PuTTY를 이용하여 내 컴퓨터에서 가상 머신(서버)로 원격 접속하기"
 date: 2018-03-11 23:59:59 +0900
-tags: [putty]
+tags: [putty, firewall, ip-address, port, ubuntu, ssh]
 comments: true
 ---
 만약 여러분의 회사 혹은 개인서버가 미국에 설치되어 있다고 가정해보자. 서버를 사용하기 위해 비행기를 타고 미국까지 가서 서버를 사용하진 않을 것이다.<br/>
@@ -72,6 +72,8 @@ $ sudo ufw status
 ![이미지](/files/connecting-local-remote-using-putty-08.png)
 
 ## 3. 서버에 접속할 도구(PuTTY)를 설치하자!
+멀리있는 사람과 이야기하고 싶을 때 스마트폰을 이용하듯이 원격 서버에 접속하고 싶을 때는 PuTTY라는 터미널 에뮬레이터를 이용한다.
+물론 PuTTY 말고도 다양한 터미널 에뮬레이터가 있지만 대표적으로 많이 사용하고 무료인 PuTTY를 설치하자.<br/>
 [여기](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)에 접속하여 PuTTY 설치파일을 내려받는다.<br/>
 *Alternative binary files* 항목에서 putty.exe 파일을 다운로드 한다.
 
