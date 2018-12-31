@@ -56,8 +56,8 @@ FLUSH PRIVILEGES;
 ```sh
 $ sudo ufw allow 3306/tcp
 ```
-[참조한 사이트1](https://pjt3591oo.github.io/blog/database/2017/05/03/abou_mysql_remote_connect.html)
-[참조한 사이트2](https://zetawiki.com/wiki/MySQL_%EC%9B%90%EA%B2%A9_%EC%A0%91%EC%86%8D_%ED%97%88%EC%9A%A9)
+[[참조한 사이트1](https://pjt3591oo.github.io/blog/database/2017/05/03/abou_mysql_remote_connect.html)]
+[[참조한 사이트2](https://zetawiki.com/wiki/MySQL_%EC%9B%90%EA%B2%A9_%EC%A0%91%EC%86%8D_%ED%97%88%EC%9A%A9)]
 
 ### 6. MySQL UTF-8 인코딩 설정방법
 (1) 아래 명령어를 실행한다.
