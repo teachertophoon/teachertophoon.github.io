@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "AWS의 ELB과 연결되어 있는 인스턴스에 HTTP로 접속 시 HTTPS로 접속하는 방법 (#AWS, #ELB, #SSL, #HTTPS)"
+title: "AWS의 ELB과 연결되어 있는 인스턴스에 HTTP로 접속 시 HTTPS로 접속하는 방법"
 date: 2018-10-13 23:59:59 +0900
-tags: [AWS, ELB, SSL, HTTPS]
+tags: [aws, elb, ssl, https]
 comments: true
 ---
 ## AWS와 HTTPS 프로토콜 사용
@@ -27,7 +27,7 @@ HTTPS 프로토콜을 사용하는 이유는 [이 사이트](https://developers.
 
 (AWS의 ELB를 사용하고 ELB에 SSL 인증서를 적용한 이후의 상황이라고 가정하고 설명하겠다.)
 
-![ELB](/files/elb_instances_1.png)
+![ELB](/files/redirect-http-https-elb-01.png)
 
 보통 회사에서의 서버 구성을 간단하게 나타내면 위와 같은 그림일 것이다.
 
