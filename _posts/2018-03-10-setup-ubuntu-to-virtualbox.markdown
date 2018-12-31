@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[애플리케이션 배포] VirtualBox에 가상 머신 생성하고 Ubuntu 설치하기"
+title: "[애플리케이션 배포] VirtualBox에 가상 머신 생성하고 우분투(Ubuntu) 설치하기"
 date: 2018-03-10 23:59:59 +0900
 tags: [virtual-box, ubuntu]
 comments: true

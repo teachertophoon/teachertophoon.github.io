@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[애플리케이션 배포] Ubuntu에 JDK(Java Development Kit) 설치하기"
+title: "[애플리케이션 배포] 우분투(Ubuntu)에 JDK(Java Development Kit) 설치하기"
 date: 2018-03-12 23:59:59 +0900
 tags: [jdk, ubuntu]
 comments: true
