@@ -213,7 +213,7 @@ SHOW USER;
 
 ## 6. 원격 접속 설정하는 방법
 Oracle DBMS 외부접속을 허용하기 위해 1521 포트번호 접속을 허용하도록 아래 명령어를 실행한다.
-```sql
+```sh
 $ sudo ufw allow 1521/tcp
 ```
 Eclipse IDE를 실행하여 Data Source Explorer 창에서 서버의 데이터베이스를 등록하여 동작하는지 확인해본다.
