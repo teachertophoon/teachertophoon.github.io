@@ -56,10 +56,10 @@ $ cd /var/lib/tomcat8/conf
 ```sh
 $ sudo vim server.xml
 ```
-port : 원하는 포트번호 (예: _8080_)<br/>
-URIEncoding : URI 인코딩 방식 (예: _UTF-8_)<br/>
-maxPostSize : Post 허용 크기 (예를 들면 _1024000000_면 1GB, _0_보다 작은 값은 무제한)<br/>
-편집을 끝냈으면 _:wq_를 입력하여 저장하고 나온다.
+port : 원하는 포트번호 (예: *8080*)<br/>
+URIEncoding : URI 인코딩 방식 (예: *UTF-8*)<br/>
+maxPostSize : Post 허용 크기 (예를 들면 *1024000000*면 1GB, *0*보다 작은 값은 무제한)<br/>
+편집을 끝냈으면 *:wq*를 입력하여 저장하고 나온다.
 
 ![이미지](/files/setup-tomcat-to-ubuntu-03.png)
 
