@@ -73,7 +73,7 @@ $ systemctl restart tomcat8
 
 그래서 다음 글에서는 자동으로 배포하는 방법을 알아보도록 하겠다.
 
-## 번외: 문제 발생 시 대체방법
+## 번외: 문제 발생 시 대처방법
 만약 아래와 같은 화면이 출력된다면 multi-part 관련 Tomcat 설정을 아래 명령어를 이용하여 변경해줘야 한다.
 
 ![이미지](/files/deploy-war-to-tomcat-manually-07.png)
