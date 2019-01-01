@@ -2,7 +2,7 @@
 layout: post
 title: "[애플리케이션 배포] 우분투(Ubuntu)에 MySQL 설치하기"
 date: 2018-03-20 23:59:59 +0900
-tags: [mysql, ubuntu]
+tags: [mysql, database, ubuntu]
 comments: true
 ---
 ### 1. 요구사항 확인하기
