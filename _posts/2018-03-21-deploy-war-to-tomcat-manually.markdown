@@ -9,7 +9,7 @@ comments: true
 
 나중에 젠킨스(Jenkins)를 이용해서 자동으로 배포하기 전에, 배포되는 원리를 이해하기 위해서 한번 수동으로 배포하는 방법을 따라해보면 좋겠다.
 
-## 1. WAR 파일<sup>[[설명]](https://en.wikipedia.org/wiki/WAR_(file_format))</sup> 생성하기
+## 1. [WAR 파일](https://en.wikipedia.org/wiki/WAR_(file_format)) 생성하기
 WAR 파일은 간단히 설명드리면 웹 애플리케이션 보관소라는 뜻으로 우리가 만든 웹 애플리케이션을 하나의 파일로 묶어놓은 것이라고 이해하면 되겠다.
 
 이 WAR 파일을 Tomcat 서버의 특정 폴더에 복사-붙여넣기만 하면 수동으로 배포하는 것은 끝나게 된다.
