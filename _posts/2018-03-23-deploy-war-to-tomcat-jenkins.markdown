@@ -94,7 +94,7 @@ Goals 항목에 작성하는 내용에 대한 설명은 [여기](http://maven.ap
 
 빌드 후 조치 항목에서는 *Deploy war/ear to a container* 항목을 선택해서 아래와 같은 내용을 작성한다.
 이 부분을 작성하면 Jenkins가 빌드를 끝마치고 WAR 파일이 생성되는데 생성한 WAR 파일을 Tomcat 컨테이너 폴더로 복사해준다.
-그 다음 Containers 항목에 Tomcat 사용자에 대한 내용을 등록해줘야 하는데 *큰 제목 3번*에서 등록했던 *user1*에 대한 정보를 추가해준다. *Add* 버튼을 눌러 추가해준다.
+그 다음 Containers 항목에 Tomcat 사용자에 대한 내용을 등록해줘야 하는데 [3. 젠킨스(Jenkins) 계정 사용을 위한 환경변수 설정 및 패키지 설치하기](#3-젠킨스jenkins-계정-사용을-위한-환경변수-설정-및-패키지-설치하기)에서 등록했던 *user1*에 대한 정보를 추가해준다. *Add* 버튼을 눌러 추가해준다.
 
 ![이미지](/files/deploy-war-to-tomcat-jenkins-22.png)
 
