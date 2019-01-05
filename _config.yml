@@ -32,6 +32,7 @@ google_analytics: UA-131518672-1
 google_adsense: ca-pub-6825502907404214
 disqus:
   shortname: blog-tophoon-com
+show_excerpts: false
 
 # Build settings
 markdown: kramdown
@@ -51,3 +52,15 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+# 태그별 포스트 목록 페이지 http://tech.kakao.com/2016/07/07/tech-blog-story/
+collections:
+  tags:
+    output: true
+    permalink: /tags/:path/
+defaults:
+  - scope:
+      path: ''
+      type: tags
+    values:
+      layout: tag
