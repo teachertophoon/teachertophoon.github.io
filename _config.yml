@@ -26,10 +26,12 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://blog.tophoon.com" # the base hostname & protocol for your site, e.g. http://example.com
 enforce_ssl: blog.tophoon.com
 github_username: teachertophoon
+minima:
+  date_format: "%Y-%m-%d"
 google_analytics: UA-131518672-1
 google_adsense: ca-pub-6825502907404214
 disqus:
-    shortname: blog-tophoon-com
+  shortname: blog-tophoon-com
 
 # Build settings
 markdown: kramdown
