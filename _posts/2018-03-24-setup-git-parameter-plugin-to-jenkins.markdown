@@ -5,7 +5,9 @@ date: 2018-03-24 23:59:59 +0900
 tags: [jenkins, plugin]
 comments: true
 ---
+#
 {%- include package-how-to-deploy-an-application.markdown -%}
+#
 
 (1) 아래 그림과 같이 Jenkins 홈 화면에서 *[Jenkins 관리]* 메뉴 선택한다.
 
@@ -47,4 +49,6 @@ Branch: */master
 
 ![이미지](/files/setup-git-parameter-plugin-to-jenkins-08.png)
 
+#
 {%- include package-how-to-deploy-an-application.markdown -%}
+#
