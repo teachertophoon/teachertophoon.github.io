@@ -1,0 +1,527 @@
+---
+layout: post
+title: "REST API 제대로 이해하기"
+date: 2019-01-21 01:30:00 +0900
+tags: [rest, api, graphql]
+comments: true
+---
+이 글은 아래 사이트를 참고하여 작성한 글입니다.
+- [그런 REST API로 괜찮은가 - 슬라이드]
+- [그런 REST API로 괜찮은가 - 동영상]
+- [REST API 제대로 알고 사용하기]
+- [RESTful에 대한 궁금증 질문 드립니다. (개념적인 질문)]
+- [WEBDAV 보안설정하는 방법]
+- [REST - HTML Form에서 GET/POST만 지원하는 이유]
+
+REST가 왜 나타나게 되었는지에 대해 역사적인 내용을 살펴보겠습니다.
+
+## REST의 역사
+#### 1. WEB (1991)
+전송방법으로 HTTP를 사용하게 되었습니다.
+
+#### 2. HTTP/1.0 (1994-1996)
+HTTP를 설계한 여러 사람 중 한명인 *로이필딩(Roy T. Fielding)*이 이런 고민을 하게 됩니다.
+> 어떻게 하면 웹을 망가뜨리지 않고 HTTP를 향상시킬 수 있을까? (How do I improve HTTP without breaking the Web?)
+
+그 해결책으로 *HTTP Object Model*이라는 것을 만들게 됩니다.
+
+#### 3. REST (1998)
+4년 뒤에 *HTTP Object Model*의 이름을 바꿔 *REST*라는 이름으로 Microsoft Research에서 발표하게 됩니다.
+
+#### REST(REpresentational State Transfer)
+> 인터넷으로 연결된 컴퓨터끼리의 *상호 운용성*을 제공하는 하나의 방법이다.
+(a way of providing *interoperability* between computer systems on the Internet.)
+
+그 후 2년 뒤에 로이필딩은 박사논문으로 발표하게 됩니다.
+> 분산 하이퍼미디어 시스템(예: 웹)을 위한 아키텍쳐 스타일.
+(An Architectural Style for Distributed Hypermedia Interaction.)
+
+## API 역사
+#### 1. XML-RPC (1998)
+XML-RPC라는 프로토콜을 Microsoft에서 만들었고 *SOAP*이라는 이름으로 바뀌게 됩니다.
+
+#### 2. Salesforce API (2000.02)
+SOAP을 이용해서 만든 최초로 공개된 API.
+```xml
+<?xml version="1.0" encoding="utf-8"?>   
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:urn="urn:enterprise.soap.sforce.com">
+  <soapenv:Header>
+     <urn:SessionHeader>
+        <urn:sessionId><b>QwWsHJyTPW.1pd0_jXlNKOSU</b></urn:sessionId>
+     </urn:SessionHeader>
+  </soapenv:Header>
+  <soapenv:Body>
+        <urn:fieldList><b>Id, Name, Website</b></urn:fieldList>
+        <urn:sObjectType><b>Account</b></urn:sObjectType>
+        <!--Zero or more repetitions:-->
+        <urn:ids><b>001D000000HS2Su</b></urn:ids>
+        <urn:ids><b>001D000000HRzKD</b></urn:ids>
+     </urn:retrieve>
+  </soapenv:Body>
+</soapenv:Envelope>
+```
+
+#### 3. flickr API (2004.08)
+SOAP
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<s:Envelope xmlns:s="http://www.w3.org/2001/06/soap-envelope">
+	<s:Body>
+		<s:Fault>
+			<faultcode>flickr.error.[error-code]</faultcode>
+			<faultstring>[error-message]</faultstring>
+			<faultactor>http://www.flickr.com/services/soap/</faultactor>
+			<details>Please see http://www.flickr.com/services/docs/ for more details</details>
+		</s:Fault>
+	</s:Body>
+</s:Envelope>
+```
+
+REST
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<rsp stat="fail">
+	<err code="[error-code]" msg="[error-message]" />
+</rsp>
+```
+#### 4. SOAP과 REST의 느낌적인 비교
+SOAP: 복잡하다, 규칙 많음, 어렵다
+
+REST: 단순하다, 규칙 적음, 쉽다
+
+<script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/1709_RC01/embed_loader.js"></script> <script type="text/javascript"> trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"SOAP API","geo":"","time":"2004-01-01 2019-01-20"},{"keyword":"REST API","geo":"","time":"2004-01-01 2019-01-20"}],"category":0,"property":""}, {"exploreQuery":"date=all&q=SOAP%20API,REST%20API","guestPath":"https://trends.google.co.kr:443/trends/embed/"}); </script>
+
+2006년, AWS가 자사 API의 사용량의 85%가 REST임을 밝힘
+
+2010년, Salesforce.com, REST API 추가
+
+REST의 승리!
+
+## 로이필딩의 박사논문에 나와있는 REST 정의 (2000)
+분산 하이퍼미디어 시스템(예: 웹)을 위한 아키텍쳐 스타일.
+(An Architectural Style for Distributed Hypermedia Interaction.)
+
+아키텍쳐 스타일: 제약조건의 집합
+
+## REST의 아키텍쳐 스타일 (특징)
+#### 1. Client - Server 구조
+REST 서버는 API 제공, 클라이언트는 사용자 인증이나 컨텍스트(세션, 로그인 정보)등을 직접 관리하는 구조로 각각의 역할이 확실히 구분되기 때문에 클라이언트와 서버에서 개발해야 할 내용이 명확해지고 서로간 의존성이 줄어들게 됩니다.
+
+#### 2. Stateless
+REST는 무상태성 성격을 갖습니다. 다시 말해 작업을 위한 상태정보를 따로 저장하고 관리하지 않습니다. 세션 정보나 쿠키정보를 별도로 저장하고 관리하지 않기 때문에 API 서버는 들어오는 요청만을 단순히 처리하면 됩니다. 때문에 서비스의 자유도가 높아지고 서버에서 불필요한 정보를 관리하지 않음으로써 구현이 단순해집니다.
+
+#### 3. Cacheable
+REST의 가장 큰 특징 중 하나는 HTTP라는 기존 웹표준을 그대로 사용하기 때문에, 웹에서 사용하는 기존 인프라를 그대로 활용이 가능합니다. 따라서 HTTP가 가진 캐싱 기능이 적용 가능합니다. HTTP 프로토콜 표준에서 사용하는 Last-Modified태그나 E-Tag를 이용하면 캐싱 구현이 가능합니다.
+
+#### 4. Uniform interface
+Uniform Interface는 URI로 지정한 리소스에 대한 조작을 통일되고 한정적인 인터페이스로 수행하는 아키텍처 스타일을 말합니다.
+
+#### 5. Layered system
+REST 서버는 다중 계층으로 구성될 수 있으며 보안, 로드 밸런싱, 암호화 계층을 추가해 구조상의 유연성을 둘 수 있고 PROXY, 게이트웨이 같은 네트워크 기반의 중간매체를 사용할 수 있게 합니다.
+
+#### 6. Code-On-Demand (옵션)
+서버에서 코드를 작성하여 클라이언트로 보내면 실행 할 수 있어야 한다. (Javascript)
+
+1, 2, 3, 5, 6번은 HTTP를 사용한다면 지켜지는 내용입니다. 대부분의 REST API는 4번 *Uniform interface*를 만족시키지 못합니다.
+
+## Uniform Interface의 제약조건
+#### 1. Identification of resources
+리소스는 URI로 식별 가능해야 한다.
+
+#### 2. Manipulation of resources through representations
+Representation 전송을 통해서 리소스를 조작해야 한다.
+
+#### 3. Self-descriptive messages (중요)
+메시지는 스스로를 설명해야 한다.
+
+아래 HTTP 요청 메시지는 뭔가 빠져있어서 Self-descriptive 하지 못하다.
+```http
+GET / HTTP/1.1
+```
+
+목적지를 추가하면 이제 Self-descriptive
+```http
+GET / HTTP/1.1
+Host: www.example.org
+```
+
+아래 HTTP 응답 메시지도 역시 뭔가 빠져있어서 Self-descriptive 하지 못하다.
+```http
+HTTP/1.1 200 OK
+
+[ { "op": "remove", "path": "/a/b/c" } ]
+```
+
+Content-Type을 보고 대괄호와 중괄호의 의미는 알게 되었지만, op와 path의 의미는 알지를 못한다.
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[ { "op": "remove", "path": "/a/b/c" } ]
+```
+
+[IANA](https://www.iana.org/)에 정의된 [application/json-patch+json](https://tools.ietf.org/html/rfc6902) 명세를 보고 op와 path의 의미를 파악할 수 있어 Self-descriptive 하게 되었다.
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json-patch+json
+
+[ { "op": "remove", "path": "/a/b/c" } ]
+```
+
+#### 4. Hypermedia as the engine of application state (HATEOAS, 중요)
+애플리케이션의 상태(State)는 Hyperlink를 이용해 전이(Transfer)되어야 한다.
+
+![이미지](/files/rest-api-01.png)
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html
+
+<html>
+<head></head>
+<body><a href="/test">test</a></body>
+</html>
+```
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Link: </articles/1>; rel="previous",
+      </articles/3>; rel="next;
+      
+{
+    "title": "The second article",
+    "contents": "blah blah..."
+}
+```
+
+## 왜 Uniform Interface의 제약조건을 지켜야 하는가?
+#### 1. 독립적 진화
+- 서버와 클라이언트가 각각 독립적으로 진화한다.
+- 서버의 기능이 변경되어도 클라이언트를 업데이트할 필요가 없다.
+- REST를 만들게 된 계기: "How do I improve HTTP without breaking the Web."
+
+#### 2. 독립적 진화 예시 - 웹(Web)
+- 웹 페이지를 변경했다고 웹 브라우저를 업데이트할 필요는 없다.
+- 웹 브라우저를 업데이트했다고 웹 페이지를 변경할 필요도 없다.
+- HTTP 명세가 변경되어도 웹은 잘 동작한다.
+- HTML 명세가 변경되어도 웹은 잘 동작한다.
+
+#### 3. 독립적 진화가 가능했던 이유는 노력
+아래와 같은 분들의 노력
+- W3C Working groups (HTML을 만드는 분들)
+- IETF Working groups (HTTP를 만드는 분들)
+- 웹 브라우저 개발자들
+- 웹 서버 개발자들
+
+얼마만큼 노력을 했는가?
+- HTML5 첫 초안에서 권고안 나오는데까지 *6년*
+- HTTP/1.1 명세 개정판 작업하는데 *7년*
+
+## 상호운용성(interoperability)에 대한 집착
+- Referer 오타지만 안 고침 (25년 전 오타)
+- charset 잘못 지은 이름이지만 안 고침 (encoding으로 이름을 지었어야 했는데 ...)
+- [HTTP 상태 코드 418](https://tools.ietf.org/html/rfc2324) 포기함 (I'm a teapot)
+- HTTP/0.9 아직도 지원함 (크롬, 파이어폭스)
+
+## REST가 웹의 독립적 진화에 도움을 주었나?
+- HTTP에 지속적으로 영향을 줌
+- Host 헤더 추가
+- 길이 제한을 다루는 방법이 명시 (414 URI Too Long 등)
+- URI에서 리소스의 정의가 추상적으로 변경됨: "식별하고자 하는 무언가"
+- 기타 HTTP와 URI에 많은 영향을 줌
+- HTTP/1.1 명세 최신판에서 REST에 대한 언급이 들어감
+- Reminder: Roy T. Fielding이 HTTP와 URI 명세의 저자 중 한명입니다.
+
+## Self-descriptive와 HATEOAS가 독립적 진화에 어떻게 도움이 될까요?
+#### Self-descriptive 확장 가능한 커뮤니케이션
+서버나 클라이언트가 변경되더라도 오고가는 메시지는 언제나 self-descriptive 하므로
+언제나 해석이 가능하다.
+
+#### HATEOAS 애플리케이션 상태 전이의 late binding
+어디서 어디로 전이가 가능한지 미리 결정되지 않는다. 어떤 상태로 전이가 완료되고 나서야 그 다음 전이될 수 있는 상태가 결정된다.
+쉽게 말하면 링크는 동적으로 변경될 수 있다.
+
+## 그럼 REST는 성공했는가?
+- REST는 웹의 독립적 진화를 위해 만들어졌다.
+- 웹은 독립적으로 진화하고 있다.
+- 성공!
+
+## 그런데 REST API는?
+- REST API는 REST 아키텍쳐 스타일을 따라야 한다.
+- 오늘날 스스로 REST API라고 하는 API들의 대부분이 REST 아키텍쳐 스타일을 따르지 않는다.
+> 하이퍼텍스트를 포함한 self-descriptive한 메시지의 uniform interface를 통해 리소스에 접근하는 API. (An API that provides network-based access to resources via a uniform interface of self-descriptive messages containing hypertext to indicate potential state transitions might be part of an overall system that is a RESTful application. -- Roy T. Fielding)
+
+## 원격 API가 꼭 REST API이어야 하는가?
+> 시스템 전체를 통제할 수 있다고 생각하거나, 진화에 관심이 없다면, REST에 대해 따지느라 시간을 낭비하지 마라. (REST emphasizes evolvability to sustain an uncontrollable system. If you think you have control over the system or aren’t interested in evolvability, don’t waste your time arguing about REST. -- Roy T. Fielding)
+
+## API는 REST를 잘 만족 못하나?
+<table>
+    <colgroup>
+        <col width="30%" />
+        <col width="30%" />
+        <col width="40%" />
+    </colgroup>
+    <thead>
+        <tr class="header">
+            <th></th>
+            <th>HTML</th>
+            <th>JSON</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th markdown="span">Hyperlink(HATEOAS)</th>
+            <td markdown="span">됨 (a 태그 등)</td>
+            <td markdown="span">정의되어있지 않음</td>
+        </tr>
+        <tr>
+            <th markdown="span">Self-descriptive</th>
+            <td markdown="span">됨 ([HTML 명세](https://www.w3.org/TR/html52))</td>
+            <td markdown="span">불완전</td>
+        </tr>
+    </tbody>
+</table>
+
+문법 해석은 가능하지만, 의미를 해석하려면 별도로 문서가(API 문서 등) 필요하다.
+
+#### 1. HTML
+*Self-descriptive* (만족)
+1. 응답 메시지의 Content-Type을 보고 media type이 text/html 임을 확인한다.
+2. HTTP 명세에 media type은 IANA에 등록되어있다고 하므로, IANA에서 text/html의 설명을 찾는다.
+3. IANA에 따르면 text/html의 명세는 http://www.w3.org/TR/html 이므로 링크를 찾아가 명세를 해석한다.
+4. 명세에 모든 태그의 해석방법이 구체적으로 나와있으므로 이를 해석하여 문서 저자가 사용자에게 해 주려고 했던 모든 일들을 해줄 수 있다.
+
+*HATEOAS* (만족)
+- a 태그를 이용해 표현된 링크를 통해 다음 상태로 전이될 수 있으므로 HATEOAS를 만족한다.
+
+```http
+GET /todos HTTP/1.1
+Host: example.org
+
+HTTP/1.1 200 OK
+Content-Type: text/html
+
+<html>
+<body>
+<a href="https://todos/1">회사 가기</a>
+<a href="https://todos/2">집에 가기</a>
+</body>
+</html>
+```
+
+#### 2. JSON
+*Self-descriptive* (불만족)
+1. 응답 메시지의 Content-Type을 보고 media type이 application/json 임을 확인한다.
+2. HTTP 명세에 media type은 IANA에 등록되어있다고 하므로, IANA에서 application/json의 설명을 찾는다.
+3. IANA에 따르면 application/json의 명세는 draft-ietf-jsonbis-rfc7159bis-04 이므로 링크를 찾아가 명세를 해석한다.
+4. 명세에 json 문서를 파싱하는 방법이 명시되어 있으므로 성공적으로 파싱에 성공한다. 그러나 "id"가 무엇을 의미하고, "title"이 무엇을 의미하는지 알 방법은 없다.
+
+*HATEOAS* (불만족)
+- 다음 상태로 전이할 링크가 없다.
+
+```http
+GET /todos HTTP/1.1
+Host: example.org
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[ 
+  {"id": 1, "title": "회사 가기"},
+  {"id": 2, "title": "집에 가기"}
+]
+```
+
+## REST API로 고쳐보자
+#### Self-descriptive
+- Media Type을 이용하자.
+1. 미디어 타입을 하나 정의한다.
+2. 미디어 타입 문서를 작성한다. 이 문서에 "id"가 뭐고 "title"이 뭔지 의미를 정의한다.
+3. [IANA](https://www.iana.org/form/media-types)에 미디어 타입을 등록한다. 이 때 만든 문서를 미디어 타입의 명세로 등록한다.
+4. 이제 이 메시지를 보는 사람은 명세를 찾아갈 수 있으므로 이 메시지의 의미를 온전히 해석할 수 있다.
+
+- Link 헤더에 Profile relation
+1. "id", "title"의 의미를 정의한 명세를 작성한다.
+2. Link 헤더에 Profile relation으로 해당 명세를 링크한다.
+3. 이제 메시지를 보는 사람은 명세를 찾아갈 수 있으므로 이 문서의 의미를 온전히 해석할 수 있다.
+4. 단점: 클라이언트가 Link 헤더(RFC 5988)와 profile(RFC 6906)을 이해해야 하고, Content negotiation을 할 수 없다.
+
+```http
+GET /todos HTTP/1.1
+Host: example.org
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Link: <https://example.org/docs/todos>; rel="profile"
+
+[ 
+  {"id": 1, "title": "회사 가기"},
+  {"id": 2, "title": "집에 가기"}
+]
+```
+
+#### HATEOAS
+- Data로 표현하기
+1. data에 다양한 방법으로 하이퍼링크를 표현한다.
+2. JSON으로 하이퍼링크를 표현하는 방법을 정의한 명세들을 활용한다. (JSON API, HAL, UBER, Siren, Collection+json ...)
+3. 단점: 링크를 표현하는 방법을 직접 정의해야 한다. 기존 API를 많이 고쳐야한다. (침투적)
+
+```http
+GET /todos HTTP/1.1
+Host: example.org
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Link: <https://example.org/docs/todos>; rel="profile"
+
+[ 
+  {
+    "link": "https://example.org/todos/1",
+    "title": "회사 가기"
+  },
+  {
+    "link": "https://example.org/todos/2",
+    "title": "집에 가기"
+  }
+]
+```
+
+```http
+GET /todos HTTP/1.1
+Host: example.org
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Link: <https://example.org/docs/todos>; rel="profile"
+
+{
+  "links": {
+    "todo": "https://example.org/todos/{id}"
+  },
+  "data": [{
+    "id": 1,
+    "title": "회사 가기"
+  }, {
+    "id": 2,
+    "title": "집에 가기"
+  }]
+]
+```
+
+```http
+GET /todos HTTP/1.1
+Host: example.org
+
+HTTP/1.1 200 OK
+Content-Type: application/vnd.api+json
+Link: <https://example.org/docs/todos>; rel="profile"
+
+{
+  "data": [{
+    "type": "todo",
+    "id": "1",
+    "attributes": { "title": "회사 가기" },
+    "links": { "self": "http://example.com/todos/1" }
+  }, {
+    "type": "todo",
+    "id": "2",
+    "attributes": { "title": "회사 가기" },
+    "links": { "self": "http://example.com/todos/2" }
+  }]
+}
+```
+
+- HTTP 헤더로 표현하기
+1. Link, Location 등의 헤더로 링크를 표현한다.
+2. 단점: 정의된 relation만 활용한다면 표현에 한계가 있다.
+
+```http
+POST /todos HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "점심 약속"
+}
+
+HTTP/1.1 204 No Content
+Location: /todos/1
+Link: </todos/>; rel="collection"
+```
+
+## 정리
+- 오늘날 대부분의 "REST API"는 사실 REST를 따르지 않고 있다.
+- REST의 제약조건 중에서 특히 *Self-descriptive*와 *HATEOAS*를 잘 만족하지 못한다.
+- REST는 긴 시간에 걸쳐(수십년) 진화하는 웹 애플리케이션을 위한 것이다.
+- REST를 따를 것인지는 API를 설계하는 이들이 스스로 판단하여 결정해야한다.
+- REST를 따르겠다면, Self-descriptive와 HATEOAS를 만족시켜야한다.
+- Self-descriptive는 Custom Media Type이나 Profile Link Relation 등으로 만족시킬 수 있다.
+- HATEOAS는 HTTP 헤더나 본문에 링크를 담아 만족시킬 수 있다.
+
+## 번외편
+#### 1. HTML Form에서 GET/POST만 지원하는 이유
+HTML 저자 중 *Ian Hickson*은 다음과 같은 이유로 Form에서 PUT/DELETE를 지원하지 않는다고 한다.
+- Form은 서버에 정보를 제출하기 위해 존재한다.
+- GET과 POST는 Form에 존재하는 대화형 컨트롤에 입력된 값을 보낸다.
+- GET은 Form에 있는 정보를 줄테니 나에게 리소스(representation)를 요청하는 뜻.
+- POST는 Form에 있는 정보를 줄테니 이걸로 처리를 요청하는 뜻.
+- DELETE에서 URI는 리소스를 정확하게 식별하고 요청을 보내기 때문에 Form을 통해 값을 전달할 게 없으며, 권한을 획득하기 위해선 header를 이용해야 한다.
+- PUT도 전송해야할 것은 대상 리소스를 대체할 Representation 그 자체인데, 조각난 Form 데이터를 처리하라고 보낼 수는 없다.
+
+#### 2. GET/POST만 사용해도 수정, 삭제를 구현할 수 있는데 PUT/DELETE가 존재하는 이유
+REST API는 크게 아래와 같이 구성된다.
+- 자원(RESOURCE) - URI(Uniform Resource Identifier)
+- 행위(Verb) - HTTP METHOD
+- 표현(Representations)
+
+만약 PUT/DELETE가 없다면 아래와 같이 표현해야 할 것이다.
+```
+POST /create/board
+GET /find/board/1
+GET /search/board/1
+POST /update/board/1
+GET /delete/board/1
+GET /remove/board/1
+```
+
+그런데 자원부분을 표현하는 URI는 인터넷에 있는 자원을 나타내는 유일한 주소이어야 하는데 위 표현은 그렇지 못하다.
+(1번 게시판 글의 URI는 `/board/1`과 같이 유일한 주소 하나만 가져야 한다.)
+
+그래서 PUT/DELETE가 존재하는 것이고, PUT/DELETE를 사용하면 아래와 같이 표현할 수 있어, URI를 만족한다.
+```
+POST /board
+GET /board/1
+PUT /board/1
+DELETE /board/1
+```
+
+#### 3. 보안상 PUT/DELETE를 사용하지 않는다는 말은 거짓!
+Java 언어로 된 Tomcat 서버가 있듯이 C++ 언어로 된 Micorsoft Internet Information Service (IIS)라는 서버가 있다.
+그리고 WebDAV라는 프로토콜이 있는데 웹을 읽고 쓰기가 가능한 매개체로 만들어주는 HTTP의 확장된 프로토콜이다.
+IIS와 WebDAV 프로토콜을 같이 사용하게 될 때, 다수의 취약점이 발견되었는데 이 취약점들을 피하기 위해 임시방편으로
+PUT과 DELETE 사용을 하지않게 한 것이 PUT, DELETE를 사용하면 보안상 취약하다라고 와전된 것이다.
+
+PUT, DELETE와 관계없이 해결책이 있는데 그것은 WebDAV를 사용하지 않는 것이라고 한다.
+IIS를 설치하면 자동으로 WebDAV가 설치되는데 WebDAV를 삭제하면 된다.
+
+#### 4. REST API의 대안이 있는가?
+REST API는 요청하는 자원에 따라 개수가 늘어나는 형태이다. 똑같은 형태로 개수가 늘어나는 것이 여간 귀찮은 점이다.
+이에 대한 대안이 있는가? 있다! 바로 GraphQL이다.
+
+관심 있으신 분들은 한번 찾아보길 바란다. 아래는 REST API와 GraphQL의 관심도를 그래프로 나타낸 것이다.
+
+<script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/1709_RC01/embed_loader.js"></script> <script type="text/javascript"> trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"SOAP API","geo":"","time":"2004-01-01 2019-01-20"},{"keyword":"REST API","geo":"","time":"2004-01-01 2019-01-20"},{"keyword":"GraphQL","geo":"","time":"2004-01-01 2019-01-20"}],"category":0,"property":""}, {"exploreQuery":"date=all&q=SOAP%20API,REST%20API,GraphQL","guestPath":"https://trends.google.co.kr:443/trends/embed/"}); </script>
+
+참고로 찾아본 GraphQL 관련 사이트
+- [https://velopert.com/2318](https://velopert.com/2318)
+- [https://www.pluralsight.com/guides/building-a-graphql-server-with-spring-boot](https://www.pluralsight.com/guides/building-a-graphql-server-with-spring-boot)
+- [https://www.baeldung.com/spring-graphql](https://www.baeldung.com/spring-graphql)
+- [https://www.youtube.com/watch?v=C57Pln3mNy0](https://www.youtube.com/watch?v=C57Pln3mNy0)
+
+[그런 REST API로 괜찮은가 - 슬라이드]: https://slides.com/eungjun/rest
+[그런 REST API로 괜찮은가 - 동영상]: https://youtu.be/RP_f5dMoHFc
+[REST API 제대로 알고 사용하기]: https://meetup.toast.com/posts/92
+[RESTful에 대한 궁금증 질문 드립니다. (개념적인 질문)]: https://hashcode.co.kr/questions/2115/restful%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B6%81%EA%B8%88%EC%A6%9D-%EC%A7%88%EB%AC%B8-%EB%93%9C%EB%A6%BD%EB%8B%88%EB%8B%A4-%EA%B0%9C%EB%85%90-%EC%A0%81%EC%9D%B8-%EC%A7%88%EB%AC%B8
+[WEBDAV 보안설정하는 방법]: https://m.blog.naver.com/PostView.nhn?blogId=miniri0&logNo=120121833137&proxyReferer=https%3A%2F%2Fwww.google.com%2F
+[REST - HTML Form에서 GET/POST만 지원하는 이유]: http://haah.kr/2017/05/23/rest-http-method-in-html-form
