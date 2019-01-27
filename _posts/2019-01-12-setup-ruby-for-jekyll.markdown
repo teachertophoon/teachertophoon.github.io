@@ -5,6 +5,8 @@ date: 2019-01-12 21:30:00 +0900
 tags: [github-pages, jekyll, ruby, gem]
 comments: true
 ---
+{%- include package-jekyll.markdown -%}
+
 이 글은 아래 사이트를 참고하여 작성한 글입니다.
 - [Jekyll on Windows](https://jekyllrb.com/docs/installation/windows/)
 
@@ -76,3 +78,5 @@ comments: true
 이 글에서는 Ruby 언어 기본 설치법과 Jekyll 프레임워크 설치법을 알아보았다.
 
 다음 글에서는 Jekyll 프레임워크를 이용하여 로컬(본인 컴퓨터)에 블로그 사이트를 생성하고 웹브라우저를 이용하여 블로그에 접속하는 방법을 설명하도록 하겠다.
+
+{%- include package-jekyll.markdown -%}
